@@ -1,8 +1,9 @@
-SBrowser = 78, 78, 966, 400, , 38, 42, 926, 364, C
+SBrowser = 78, 78, 966, 400, C, 38, 42, 926, 364, C
 wke = 104, 104, 992, 426, 
-MyModule = 130, 130, 1018, 452, 
-MiniblinkAPI = 0, 0, 870, 342, 
+MyModule = 130, 130, 1018, 452, C
+MiniblinkAPI = 0, 0, 870, 342, Z
 cUniversalDLLCalls = 44, 58, 973, 421, 
 MiniblinkCallBack = 66, 87, 1039, 345, 
 MiniblinkTypeEnum = 88, 116, 954, 479, 
 SBrowserCls = 88, 116, 954, 479, 
+fastcallCallback = 66, 87, 932, 450, C

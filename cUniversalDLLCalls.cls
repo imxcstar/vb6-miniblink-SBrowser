@@ -314,6 +314,19 @@ Public Function PointerToStringW(ByVal UnicodePointer As Long) As String
     End If
 End Function
 
+Public Function PointerToStringUTF8(ByVal ANSIpointer As Long) As String
+    Dim lSize As Long
+    Dim sData() As Byte
+    If Not ANSIpointer = 0& Then
+        lSize = lstrlenA(ANSIpointer)
+        If lSize > 0& Then
+            ReDim sData(lSize) As Byte
+            CopyMemory sData(0), ByVal ANSIpointer, lSize
+            PointerToStringUTF8 = ByteToStr(sData, "UTF-8")
+        End If
+    End If
+End Function
+
 Public Function ThunkFor_CDeclCallbackToVB(ByVal VBcallbackPointer As Long, _
                             ByVal CallbackParamCount As Long) As Long
                             

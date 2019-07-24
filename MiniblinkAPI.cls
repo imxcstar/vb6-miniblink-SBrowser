@@ -189,6 +189,7 @@ Private api_wkeUpdate As String, api_wkeUtilDecodeURLEscape As String, _
         api_wkeZoomFactor As String, api_wkeSetWkeDllPath As String
 
 Private SDLL As cUniversalDLLCalls
+Private fcb As fastcallCallback
 
 'ApiFun
 
@@ -197,11 +198,11 @@ Public Function wkeVersion() As Long
 End Function
 
 Public Function wkeVersionString() As String
-    wkeVersionString = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_wkeVersionString, STR_NONE, CR_LONG, CC_CDECL))
+    wkeVersionString = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_wkeVersionString, STR_NONE, CR_LONG, CC_CDECL))
 End Function
 
 Public Sub wkeSetWkeDllPath(ByVal dllPath As String)
-    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetWkeDllPath, STR_ANSI, CR_None, CC_CDECL, dllPath
+    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetWkeDllPath, STR_UNICODE, CR_None, CC_CDECL, dllPath
 End Sub
 
 Public Sub wkeGC(ByVal webView As Long, ByVal delayMs As Long)
@@ -241,7 +242,7 @@ Public Function wkeReload(ByVal webView As Long) As Boolean
 End Function
 
 Public Function wkeGetTitle(ByVal webView As Long) As String
-    wkeGetTitle = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetTitle, STR_NONE, CR_LONG, CC_CDECL, webView))
+    wkeGetTitle = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetTitle, STR_NONE, CR_LONG, CC_CDECL, webView))
 End Function
 
 Public Function wkeGetTitleW(ByVal webView As Long) As String
@@ -353,7 +354,7 @@ Public Function wkeGetCookieW(ByVal webView As Long) As String
 End Function
 
 Public Function wkeGetCookie(ByVal webView As Long) As String
-    wkeGetCookie = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetCookie, STR_NONE, CR_LONG, CC_CDECL, webView))
+    wkeGetCookie = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetCookie, STR_NONE, CR_LONG, CC_CDECL, webView))
 End Function
 
 Public Sub wkeSetCookie(ByVal webView As Long, ByVal url As String, ByVal cookie As String)
@@ -377,15 +378,15 @@ Public Function wkeIsCookieEnabled(ByVal webView As Long) As Boolean
 End Function
 
 Public Sub wkeSetCookieJarPath(ByVal webView As Long, ByVal path As String)
-    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetCookieJarPath, STR_ANSI, CR_None, CC_CDECL, webView, path
+    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetCookieJarPath, STR_UNICODE, CR_None, CC_CDECL, webView, path
 End Sub
 
 Public Sub wkeSetCookieJarFullPath(ByVal webView As Long, ByVal path As String)
-    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetCookieJarFullPath, STR_ANSI, CR_None, CC_CDECL, webView, path
+    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetCookieJarFullPath, STR_UNICODE, CR_None, CC_CDECL, webView, path
 End Sub
 
 Public Sub wkeSetLocalStorageFullPath(ByVal webView As Long, ByVal path As String)
-    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetLocalStorageFullPath, STR_ANSI, CR_None, CC_CDECL, webView, path
+    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetLocalStorageFullPath, STR_UNICODE, CR_None, CC_CDECL, webView, path
 End Sub
 
 Public Sub wkeSetMediaVolume(ByVal webView As Long, ByVal volume As Double)
@@ -485,11 +486,11 @@ Public Function wkeRunJsByFrame(ByVal webView As Long, ByVal frameId As Long, By
 End Function
 
 Public Function wkeGetFrameUrl(ByVal webView As Long, ByVal frameId As Long) As String
-    wkeGetFrameUrl = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetFrameUrl, STR_NONE, CR_LONG, CC_CDECL, webView, frameId))
+    wkeGetFrameUrl = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetFrameUrl, STR_NONE, CR_LONG, CC_CDECL, webView, frameId))
 End Function
 
 Public Function wkeGetString(ByVal s As Long) As String
-    wkeGetString = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetString, STR_NONE, CR_LONG, CC_CDECL, s))
+    wkeGetString = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetString, STR_NONE, CR_LONG, CC_CDECL, s))
 End Function
 
 Public Function wkeGetStringW(ByVal string_K As Long) As String
@@ -637,7 +638,7 @@ Public Sub wkeSetHeadlessEnabled(ByVal webView As Long, ByVal b As Boolean)
 End Sub
 
 Public Sub wkeSetDebugConfig(ByVal webView As Long, ByVal debugString As String, ByVal param As String)
-    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetDebugConfig, STR_ANSI, CR_None, CC_CDECL, webView, debugString, param
+    SDLL.CallFunction_DLL NodeDllPath, api_wkeSetDebugConfig, STR_ANSI, CR_None, CC_CDECL, webView, debugString, UTF8_URLEncoding(param)
 End Sub
 
 Public Sub wkeSetHandle(ByVal webView As Long, ByVal wnd As Long)
@@ -669,7 +670,7 @@ Public Sub wkeSetUserAgentW(ByVal webView As Long, ByVal userAgent As String)
 End Sub
 
 Public Function wkeGetUserAgent(ByVal webView As Long) As String
-    wkeGetUserAgent = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetUserAgent, STR_NONE, CR_LONG, CC_CDECL, webView))
+    wkeGetUserAgent = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetUserAgent, STR_NONE, CR_LONG, CC_CDECL, webView))
 End Function
 
 Public Sub wkeLoadURL(ByVal webView As Long, ByVal url As String)
@@ -701,7 +702,7 @@ Public Sub wkeLoadFileW(ByVal webView As Long, ByVal filename As String)
 End Sub
 
 Public Function wkeGetURL(ByVal webView As Long) As String
-    wkeGetURL = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetURL, STR_NONE, CR_LONG, CC_CDECL, webView))
+    wkeGetURL = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_wkeGetURL, STR_NONE, CR_LONG, CC_CDECL, webView))
 End Function
 
 Public Sub wkeNetSetHTTPHeaderField(ByVal jobPtr As Long, ByVal key As String, ByVal value As String, ByVal response As Boolean)
@@ -805,11 +806,11 @@ Public Function jsToTempStringW(ByVal es As Long, ByVal v As Currency) As String
 End Function
 
 Public Function jsToTempString(ByVal es As Long, ByVal v As Currency) As String
-    jsToTempString = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_jsToTempString, STR_NONE, CR_LONG, CC_CDECL, es, v))
+    jsToTempString = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_jsToTempString, STR_NONE, CR_LONG, CC_CDECL, es, v))
 End Function
 
 Public Function jsToString(ByVal es As Long, ByVal v As Currency) As String
-    jsToString = SDLL.PointerToStringA(SDLL.CallFunction_DLL(NodeDllPath, api_jsToString, STR_NONE, CR_LONG, CC_CDECL, es, v))
+    jsToString = SDLL.PointerToStringUTF8(SDLL.CallFunction_DLL(NodeDllPath, api_jsToString, STR_NONE, CR_LONG, CC_CDECL, es, v))
 End Function
 
 Public Function jsToStringW(ByVal es As Long, ByVal v As Currency) As String
@@ -934,7 +935,7 @@ Public Function wkeNetGetFavicon(ByVal webView As Long, ByVal callback As Long, 
 End Function
 
 Public Sub jsBindFunction(ByVal name As String, ByVal fn As Long, ByVal argCount As Long)
-    Dim TAddress As Long: TAddress = fn
+    Dim TAddress As Long: TAddress = fcb.»Øµ÷fastcall(1, fn, False)
     SDLL.CallFunction_DLL NodeDllPath, api_jsBindFunction, STR_ANSI, CR_None, CC_CDECL, name, TAddress, argCount
 End Sub
 
@@ -1069,6 +1070,7 @@ Private Sub Class_Initialize()
     wke_api_init
     InitMiniblinkAPI
     Set SDLL = New cUniversalDLLCalls
+    Set fcb = New fastcallCallback
 End Sub
 
 Private Sub InitMiniblinkAPI()

@@ -1,5 +1,5 @@
 Type=Control
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
 UserControl=SBrowser.ctl
 Module=wke; wke.bas
 Module=MyModule; MyModule.bas
@@ -8,6 +8,7 @@ Class=cUniversalDLLCalls; cUniversalDLLCalls.cls
 Class=MiniblinkCallBack; MiniblinkCallBack.cls
 Class=MiniblinkTypeEnum; MiniblinkTypeEnum.cls
 Class=SBrowserCls; SBrowserCls.cls
+Class=fastcallCallback; fastcallCallback.cls
 Startup="(None)"
 HelpFile=""
 Title="SBrowser_G"
