@@ -12,6 +12,7 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+Private Declare Function SafeArrayGetDim Lib "oleaut32.dll" (ByRef saArray() As Any) As Long
 
 ' for documentation on the main API DispCallFunc... http://msdn.microsoft.com/en-us/library/windows/desktop/ms221473%28v=vs.85%29.aspx
 Private Declare Function DispCallFunc Lib "oleaut32.dll" (ByVal pvInstance As Long, ByVal offsetinVft As Long, ByVal CallConv As Long, ByVal retTYP As Integer, ByVal paCNT As Long, ByRef paTypes As Integer, ByRef paValues As Long, ByRef retVAR As Variant) As Long
@@ -177,8 +178,17 @@ Public Function CallFunction_DLL(ByVal LibName As String, ByVal FunctionName As 
     fPtr = GetProcAddress(hMod, FunctionName)           ' get the function pointer (Case-Sensitive)
     If fPtr = 0& Then Exit Function                     ' abort if failure
     
-    vParams() = FunctionParameters()                    ' copy passed parameters, if any
-    pCount = Abs(UBound(vParams) - LBound(vParams) + 1&)
+    If UBound(FunctionParameters) >= 0 Then
+        'ReDim vParams(UBound(FunctionParameters)) As Variant ' copy passed parameters, if any
+        'Dim zc As Variant
+        'Dim zci As Long, zcj As Long
+        'For zci = 0 To UBound(FunctionParameters)
+        '    vParams(zci) = FunctionParameters(zci)
+        'Next
+        vParams() = FunctionParameters()                    ' copy passed parameters, if any
+        pCount = Abs(UBound(vParams) - LBound(vParams) + 1&)
+    End If
+    
     If HasStringParams > STR_NONE Then                  ' patch to ensure Strings passed as handles
         For pIndex = 0& To pCount - 1&                  ' for each string param, get its StrPtr
             If VarType(FunctionParameters(pIndex)) = vbString Then
@@ -413,6 +423,12 @@ End Sub
 '        If m_Release = True Then FreeLibrary m_Mod
 '    End If
 'End Sub
+
+
+
+
+
+
 
 
 
