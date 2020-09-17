@@ -1,7 +1,7 @@
 Type=Exe
 Form=Form1.frm
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
-Object={73023AFE-5F65-436F-882A-B997D82154CD}#2.0#0; SBrowser_G.ocx
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Object={73023AFE-5F65-436F-882A-B997D82154CD}#21.0#0; SBrowser_G.ocx
 IconForm="Form1"
 Startup="Form1"
 ExeName32="¹¤³Ì1.exe"

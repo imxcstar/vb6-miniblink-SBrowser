@@ -361,7 +361,7 @@ Private Function WkeCreateViewCallbackPh(ByVal webView As Long, ByVal param As L
     Dim t As wkeWindowFeatures
     CopyMemory2 VarPtr(t), windowFeatures, LenB(t)
     RaiseEvent wkeCreateViewCallback(webView, param, navigationType, SDLL.PointerToStringA(url), t)
-    WkeCreateViewCallbackPh = VarPtr(Return_wkeCreateViewCallback)
+    WkeCreateViewCallbackPh = Return_wkeCreateViewCallback
 End Function
 
 Private Function WkeDocumentReadyCallbackPh(ByVal webView As Long, ByVal param As Long) As Long
