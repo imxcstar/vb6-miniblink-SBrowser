@@ -286,7 +286,7 @@ Private Sub zTerminate()
 End Sub
 
 Private Function WkeNetResponseCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal url As Long, ByVal job As Long) As Long
-    RaiseEvent wkeNetResponseCallback(webView, param, SDLL.PointerToStringA(url), job)
+    RaiseEvent wkeNetResponseCallback(webView, param, SDLL.PointerToStringUTF8(url), job)
     WkeNetResponseCallbackPh = VarPtr(booltoint(Return_wkeNetResponseCallback))
 End Function
 
@@ -301,7 +301,7 @@ End Function
 Private Function WkeOnNetGetFaviconPh(ByVal webView As Long, ByVal param As Long, ByVal url As Long, ByVal buf As Long) As Long
     Dim t As wkeMemBuf
     CopyMemory2 VarPtr(t), buf, LenB(t)
-    RaiseEvent wkeOnNetGetFavicon(webView, param, SDLL.PointerToStringA(url), t)
+    RaiseEvent wkeOnNetGetFavicon(webView, param, SDLL.PointerToStringUTF8(url), t)
 End Function
 
 Private Function JsNativeFunctionPh(ByVal es As Long) As Long
@@ -315,15 +315,15 @@ Private Function WkeJsNativeFunctionPh(ByVal es As Long, ByVal param As Long) As
 End Function
 
 Private Function WkeTitleChangedCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal title As Long) As Long
-    RaiseEvent wkeTitleChangedCallback(webView, param, MiniblinkAPICls.wkeGetStringW(title))
+    RaiseEvent wkeTitleChangedCallback(webView, param, MiniblinkAPICls.wkeGetString(title))
 End Function
 
 Private Function WkeURLChangedCallbackPh(ByVal webView As Long, ByVal param As String, ByVal url As Long) As Long
-    RaiseEvent wkeURLChangedCallback(webView, param, SDLL.PointerToStringA(url))
+    RaiseEvent wkeURLChangedCallback(webView, param, MiniblinkAPICls.wkeGetString(url))
 End Function
 
 Private Function WkeURLChangedCallback2Ph(ByVal webView As Long, ByVal param As Long, ByVal frameId As Long, ByVal url As Long) As Long
-    RaiseEvent wkeURLChangedCallback2(webView, param, frameId, SDLL.PointerToStringA(url))
+    RaiseEvent wkeURLChangedCallback2(webView, param, frameId, MiniblinkAPICls.wkeGetString(url))
 End Function
 
 Private Function WkePaintUpdatedCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long) As Long
@@ -337,30 +337,30 @@ Private Function WkePaintBitUpdatedCallbackPh(ByVal webView As Long, ByVal param
 End Function
 
 Private Function WkeAlertBoxCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal msg As Long) As Long
-    RaiseEvent wkeAlertBoxCallback(webView, param, MiniblinkAPICls.wkeGetStringW(msg))
+    RaiseEvent wkeAlertBoxCallback(webView, param, MiniblinkAPICls.wkeGetString(msg))
 End Function
 
 Private Function WkeConfirmBoxCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal msg As Long) As Long
-    RaiseEvent wkeConfirmBoxCallback(webView, param, MiniblinkAPICls.wkeGetStringW(msg))
+    RaiseEvent wkeConfirmBoxCallback(webView, param, MiniblinkAPICls.wkeGetString(msg))
     WkeConfirmBoxCallbackPh = VarPtr(booltoint(Return_wkeConfirmBoxCallback))
 End Function
 
 Private Function WkePromptBoxCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal msg As Long, ByVal defaultResult As Long, ByVal result As Long) As Long
     Dim tret As String
-    RaiseEvent wkePromptBoxCallback(webView, param, MiniblinkAPICls.wkeGetStringW(msg), MiniblinkAPICls.wkeGetStringW(defaultResult), tret)
-    MiniblinkAPICls.wkeSetStringW result, tret, LenB(tret)
+    RaiseEvent wkePromptBoxCallback(webView, param, MiniblinkAPICls.wkeGetString(msg), MiniblinkAPICls.wkeGetString(defaultResult), tret)
+    MiniblinkAPICls.wkeSetString result, tret, LenB(tret)
     WkePromptBoxCallbackPh = VarPtr(booltoint(Return_wkePromptBoxCallback))
 End Function
 
 Private Function WkeNavigationCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal navigationType As Long, ByVal url As Long) As Long
-    RaiseEvent wkeNavigationCallback(webView, param, navigationType, SDLL.PointerToStringA(url))
+    RaiseEvent wkeNavigationCallback(webView, param, navigationType, MiniblinkAPICls.wkeGetString(url))
     WkeNavigationCallbackPh = VarPtr(booltoint(Return_wkeNavigationCallback))
 End Function
 
 Private Function WkeCreateViewCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal navigationType As Long, ByVal url As Long, ByVal windowFeatures As Long) As Long
     Dim t As wkeWindowFeatures
     CopyMemory2 VarPtr(t), windowFeatures, LenB(t)
-    RaiseEvent wkeCreateViewCallback(webView, param, navigationType, SDLL.PointerToStringA(url), t)
+    RaiseEvent wkeCreateViewCallback(webView, param, navigationType, MiniblinkAPICls.wkeGetString(url), t)
     WkeCreateViewCallbackPh = Return_wkeCreateViewCallback
 End Function
 
@@ -378,16 +378,16 @@ Private Function WkeDownloadCallbackPh(ByVal webView As Long, ByVal param As Lon
 End Function
 
 Private Function WkeConsoleCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal level As Long, ByVal message As Long, ByVal sourceName As Long, ByVal sourceLine As Long, ByVal stackTrace As Long) As Long
-    RaiseEvent wkeConsoleCallback(webView, param, level, MiniblinkAPICls.wkeGetStringW(message), MiniblinkAPICls.wkeGetStringW(sourceName), sourceLine, MiniblinkAPICls.wkeGetStringW(stackTrace))
+    RaiseEvent wkeConsoleCallback(webView, param, level, MiniblinkAPICls.wkeGetString(message), MiniblinkAPICls.wkeGetString(sourceName), sourceLine, MiniblinkAPICls.wkeGetString(stackTrace))
 End Function
 
 Private Function WkeLoadUrlBeginCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal url As Long, ByVal job As Long) As Long
-    RaiseEvent wkeLoadUrlBeginCallback(webView, param, SDLL.PointerToStringA(url), job)
+    RaiseEvent wkeLoadUrlBeginCallback(webView, param, SDLL.PointerToStringUTF8(url), job)
     WkeLoadUrlBeginCallbackPh = VarPtr(booltoint(Return_wkeLoadUrlBeginCallback))
 End Function
 
 Private Function WkeLoadUrlEndCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal url As Long, ByVal job As Long, ByVal buf As Long, ByVal tlen As Long) As Long
-    RaiseEvent wkeLoadUrlEndCallback(webView, param, SDLL.PointerToStringA(url), job, buf, tlen)
+    RaiseEvent wkeLoadUrlEndCallback(webView, param, SDLL.PointerToStringUTF8(url), job, buf, tlen)
 End Function
 
 Private Function WkeDidCreateScriptContextCallbackPh(ByVal webView As Long, ByVal param As Long, ByVal frameId As Long, ByVal context As Long, ByVal extensionGroup As Long, ByVal worldId As Long) As Long
