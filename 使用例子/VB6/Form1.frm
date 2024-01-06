@@ -3,7 +3,7 @@ Begin VB.Form Form1
    Caption         =   "Form1"
    ClientHeight    =   5970
    ClientLeft      =   165
-   ClientTop       =   855
+   ClientTop       =   810
    ClientWidth     =   12585
    LinkTopic       =   "Form1"
    ScaleHeight     =   5970
@@ -45,7 +45,12 @@ Private Sub Form_Load()
     Set mb_callback = New MiniblinkCallBack
 End Sub
 
-Private Sub mb_callback_wkeCreateViewCallback(ByVal webView As Long, ByVal param As Long, ByVal navigationType As SBrowser_G.wkeNavigationType, ByVal url As String, windowFeatures As SBrowser_G.wkeWindowFeatures)
+Private Sub Form_Resize()
+    If Me.WindowState = 1 Or mb = 0 Then Exit Sub
+    mb_api.wkeMoveWindow mb, 0, 0, Me.ScaleWidth, Me.ScaleHeight
+End Sub
+
+Private Sub mb_callback_wkeCreateViewCallback(ByVal webView As Long, ByVal param As Long, ByVal navigationType As SBrowser_G_203.wkeNavigationType, ByVal url As String, windowFeatures As SBrowser_G_203.wkeWindowFeatures)
     Debug.Print "触发了wkeCreateViewCallback"
     mb_callback.Return_wkeCreateViewCallback = webView      '使用原webview加载
 End Sub
